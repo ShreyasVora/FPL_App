@@ -1,0 +1,1913 @@
+#: import get_color_from_hex kivy.utils.get_color_from_hex
+
+WindowManager:
+    MainWindow:
+    FixtureDiffs:
+    UpdateFiles:
+    PredictFixture:
+    PredictRound:
+    PredictTopPoints:
+    ViewPastResults:
+    ViewTables:
+    FPLPlan:
+    FPLTeam:
+    Settings1:
+    Screen1_1:
+    Screen1_2:
+    Screen1_3:
+    Screen2_2:
+    Set_Team:
+    UsablePlayers:
+
+
+<MainWindow>:
+    name: 'main'
+
+    GridLayout:
+        cols: 2
+
+        GridLayout:
+            cols:1
+
+            Button:
+                text: 'View Fixture Difficulties'
+                on_release:
+                    app.root.current = 'fixturediffs'
+                    root.manager.transition.direction = 'left'
+
+            Button:
+                text: 'Update Files'
+                on_release:
+                    app.root.current = 'updatefiles'
+                    root.manager.transition.direction = 'left'
+
+            Button:
+                text: 'Predict Fixture'
+                on_release:
+                    app.root.current = 'predictfixture'
+                    root.manager.transition.direction = 'left'
+
+            Button:
+                text: 'Predict Round of Fixtures'
+                on_release:
+                    app.root.current = 'predictround'
+                    root.manager.transition.direction = 'left'
+
+
+            Button:
+                text: 'Predict Top Scorers'
+                on_release:
+                    app.root.current = 'predicttoppoints'
+                    root.manager.transition.direction = 'left'
+
+        GridLayout:
+            cols: 1
+
+
+            Button:
+                text: 'View Past Results'
+                on_release:
+                    app.root.current = 'viewpastresults'
+                    root.manager.transition.direction = 'left'
+
+
+            Button:
+                text: 'View Tables'
+                on_release:
+                    app.root.current = 'viewtables'
+                    root.manager.transition.direction = 'left'
+
+
+            Button:
+                text: 'FPL_Plan'
+                on_release:
+                    app.root.current = 'fplplan'
+                    root.manager.transition.direction = 'left'
+
+
+            Button:
+                text: 'FPL_Team'
+                on_release:
+                    app.root.current = 'fplteam'
+                    root.manager.transition.direction = 'left'
+
+
+            Button:
+                text: 'Settings'
+                on_release:
+                    app.root.current = 'settings1'
+                    root.manager.transition.direction = 'left'
+    Button:
+        pos_hint:{'center_x':0.93, 'center_y': 0.95}
+        size_hint:(0.1, 0.06)
+        text:'Help'
+        on_release:
+            root.helpbutton()
+<FixtureDiffs>
+    name: 'fixturediffs'
+    GridLayout:
+        cols:2
+        GridLayout:
+            cols:1
+            Button:
+                text: 'Specific Gameweek Range'
+                on_release:
+                    app.root.current = 'screen1_1'
+                    root.manager.transition.direction = 'left'
+            Button:
+                text: 'General'
+                on_release:
+                    app.root.current = 'screen1_2'
+                    root.manager.transition.direction = 'left'
+            Label:
+                text:''
+
+        GridLayout:
+            cols:1
+            Button:
+                text: 'Specific Team'
+                on_release:
+                    app.root.current = 'screen1_3'
+                    root.manager.transition.direction = 'left'
+            Button:
+                text: 'View Tables'
+                on_release:
+                    root.viewTables()
+            Button:
+                text: 'Go Back'
+                on_release:
+                    app.root.current = 'main'
+                    root.manager.transition.direction = 'right'
+<Screen1_1>
+    name: 'screen1_1'
+    gw_start:gw_start
+    gw_end:gw_end
+    GridLayout:
+        cols:2
+        GridLayout:
+            cols:1
+            Label:
+                text:'Start GW'
+            Label:
+                text:'End GW'
+            Button:
+                markup:True
+                text: '[color=#00FF00]Display Results[/color]'
+                on_release: root.runFixDiffCalc()
+        GridLayout:
+            cols:1
+            TextInput:
+                id: gw_start
+                multiline:False
+            TextInput:
+                id: gw_end
+                multiline:False
+            Button:
+                text:'Go Back'
+                on_release:
+                    app.root.current = 'fixturediffs'
+                    root.manager.transition.direction = 'right'
+
+<popup_1_1>:
+    ScrollView:
+        pos_hint: {'center_x': 0.25, 'center_y': 0.5}
+        Label:
+            markup:True
+            size_hint_y: None
+            text_size: (self.width / 2, None)
+            id: table1
+            height: self.texture_size[1]
+    ScrollView:
+        pos_hint: {'center_x': 0.75, 'center_y': 0.5}
+        Label:
+            markup:True
+            size_hint_y: None
+            text_size: (self.width / 2, None)
+            id: table2
+            height: self.texture_size[1]
+
+<Screen1_2>
+    name: 'screen1_2'
+    gw_start:start
+    GridLayout:
+        cols:2
+        GridLayout:
+            cols:1
+            Label:
+                text:'Starting from gameweek:'
+            Button:
+                markup:True
+                text: '[color=#00FF00]Display Results[/color]'
+                on_release: root.runGeneralCalc()
+        GridLayout:
+            cols:1
+            TextInput:
+                id:start
+                multiline:False
+            Button:
+                text:'Go Back'
+                on_release:
+                    app.root.current = 'fixturediffs'
+                    root.manager.transition.direction = 'right'
+<popup_1_2>:
+    ScrollView:
+        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+        Label:
+            size_hint_y: None
+            markup:True
+            text_size: (self.width, None)
+            id: summary
+            height: self.texture_size[1]
+<Screen1_3>
+    name: 'screen1_3'
+    gw_start:start
+    gw_end:end
+    team_name:team_name
+    GridLayout:
+        cols:2
+        GridLayout:
+            cols:1
+            Label:
+                text:'Starting from gameweek:'
+            Label:
+                text:'Ending at gameweek:'
+            Label:
+                text:'Team name:'
+            Button:
+                markup:True
+                text: '[color=#00FF00]Display Results[/color]'
+                on_release:
+                    root.runTeamCalc()
+        GridLayout:
+            cols:1
+            TextInput:
+                id:start
+                multiline:False
+            TextInput:
+                id:end
+                multiline:False
+            TextInput:
+                id:team_name
+                multiline:False
+            Button:
+                text:'Go Back'
+                on_release:
+                    app.root.current = 'fixturediffs'
+                    root.manager.transition.direction = 'right'
+<popup_1_3>:
+    Label:
+        pos_hint: {'center_x': 0.18, 'center_y': 0.96}
+        text:'[color=#FFFF00]Attack[color=#FFFFFF]'
+        markup:True
+    Label:
+        pos_hint: {'center_x': 0.82, 'center_y': 0.96}
+        text:'[color=#FFFF00]Defence[color=#FFFFFF]'
+        markup:True
+    ScrollView:
+        pos_hint: {'center_x': 0.1, 'center_y': 0.4}
+        Label:
+            size_hint_y: None
+            markup:True
+            text_size: (self.width / 5, None)
+            id: HDtab
+            height: self.texture_size[1]
+    ScrollView:
+        pos_hint: {'center_x': 0.3, 'center_y': 0.4}
+        Label:
+            size_hint_y: None
+            markup:True
+            text_size: (self.width / 5, None)
+            id: ADtab
+            height: self.texture_size[1]
+    ScrollView:
+        pos_hint: {'center_x': 0.525, 'center_y': 0.4}
+        Label:
+            size_hint_y: None
+            markup:True
+            text_size: (self.width / 4, None)
+            id: Df
+            height: self.texture_size[1]
+    ScrollView:
+        pos_hint: {'center_x': 0.775, 'center_y': 0.4}
+        Label:
+            size_hint_y: None
+            markup:True
+            text_size: (self.width / 5, None)
+            id: HAtab
+            height: self.texture_size[1]
+    ScrollView:
+        pos_hint: {'center_x': 1, 'center_y': 0.4}
+        Label:
+            size_hint_y: None
+            markup:True
+            text_size: (self.width / 5, None)
+            id: AAtab
+            height: self.texture_size[1]
+<popup_1_4>:
+    Label:
+        pos_hint: {'center_x': 0.22, 'center_y': 0.96}
+        text:'[color=#FFFF00]Attack[color=#FFFFFF]'
+        markup:True
+    Label:
+        pos_hint: {'center_x': 0.78, 'center_y': 0.96}
+        text:'[color=#FFFF00]Defence[color=#FFFFFF]'
+        markup:True
+    ScrollView:
+        pos_hint: {'center_x': 0.1, 'center_y': 0.4}
+        Label:
+            size_hint_y: None
+            markup:True
+            text_size: (self.width / 5, None)
+            id: HAtab
+            height: self.texture_size[1]
+    ScrollView:
+        pos_hint: {'center_x': 0.325, 'center_y': 0.4}
+        Label:
+            size_hint_y: None
+            markup:True
+            text_size: (self.width / 5, None)
+            id: AAtab
+            height: self.texture_size[1]
+    ScrollView:
+        pos_hint: {'center_x': 0.55, 'center_y': 0.4}
+        Label:
+            size_hint_y: None
+            markup:True
+            text_size: (self.width / 5, None)
+            id: Df
+            height: self.texture_size[1]
+    ScrollView:
+        pos_hint: {'center_x': 0.775, 'center_y': 0.4}
+        Label:
+            size_hint_y: None
+            markup:True
+            text_size: (self.width / 5, None)
+            id: HDtab
+            height: self.texture_size[1]
+    ScrollView:
+        pos_hint: {'center_x': 1, 'center_y': 0.4}
+        Label:
+            size_hint_y: None
+            markup:True
+            text_size: (self.width / 5, None)
+            id: ADtab
+            height: self.texture_size[1]
+<UpdateFiles>
+    name: 'updatefiles'
+    GridLayout:
+        cols:2
+        GridLayout:
+            cols:1
+            Button:
+                text: 'Update Scores'
+                on_release:
+                    root.updateScoresPopup()
+            Label:
+                text: ''
+        GridLayout:
+            cols:1
+            Button:
+                text: 'Update & View Goalscorers'
+                on_release:
+                    root.goalscorers()
+                    app.root.current = 'screen2_2'
+                    root.manager.transition.direction = 'left'
+            Button:
+                text: 'Go Back'
+                on_release:
+                    app.root.current = 'main'
+                    root.manager.transition.direction = 'right'
+<popup_2_1>:
+    ScrollView:
+        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+        Label:
+            size_hint_y: None
+            markup:True
+            text_size: (self.width, None)
+            id: HDtab
+            height: self.texture_size[1]
+<Screen2_2>
+    name:'screen2_2'
+    GridLayout:
+        cols:2
+        GridLayout:
+            cols:1
+            Button:
+                text:'Top Goal Charts'
+                on_press:
+                    root.topGS()
+            Label:
+                text:''
+        GridLayout:
+            cols:1
+            Button:
+                text:'Top Assist Charts'
+                on_press:
+                    root.topA()
+            Button:
+                text:'Go Back'
+                on_release:
+                    app.root.current = 'updatefiles'
+                    root.manager.transition.direction = 'right'
+<popup_2_2_g>:
+    ScrollView:
+        pos_hint: {'center_x': 0.2, 'center_y': 0.5}
+        Label:
+            size_hint_y: None
+            markup:True
+            text_size: (self.width / 3, None)
+            id: col1
+            height: self.texture_size[1]
+    ScrollView:
+        pos_hint: {'center_x': 0.6, 'center_y': 0.5}
+        Label:
+            size_hint_y: None
+            markup:True
+            text_size: (self.width / 3, None)
+            id: col2
+            height: self.texture_size[1]
+    ScrollView:
+        pos_hint: {'center_x': 0.9, 'center_y': 0.5}
+        Label:
+            size_hint_y: None
+            markup:True
+            text_size: (self.width / 3, None)
+            id: col3
+            height: self.texture_size[1]
+<popup_2_2_a>:
+    ScrollView:
+        pos_hint: {'center_x': 0.2, 'center_y': 0.5}
+        Label:
+            size_hint_y: None
+            markup:True
+            text_size: (self.width / 3, None)
+            id: col1
+            height: self.texture_size[1]
+    ScrollView:
+        pos_hint: {'center_x': 0.6, 'center_y': 0.5}
+        Label:
+            size_hint_y: None
+            markup:True
+            text_size: (self.width / 3, None)
+            id: col2
+            height: self.texture_size[1]
+    ScrollView:
+        pos_hint: {'center_x': 0.9, 'center_y': 0.5}
+        Label:
+            size_hint_y: None
+            markup:True
+            text_size: (self.width / 3, None)
+            id: col3
+            height: self.texture_size[1]
+<PredictFixture>
+    name: 'predictfixture'
+    h_team:h_team
+    a_team:a_team
+    GridLayout:
+        cols:2
+        GridLayout:
+            cols:1
+            Label:
+                text:'Home Team'
+            Label:
+                text:'Away team'
+            Button:
+                text:'Predict Score'
+                on_release:
+                    root.scorepred()
+            Label:
+                text:''
+        GridLayout:
+            cols:1
+            TextInput:
+                id:h_team
+                multiline:False
+            TextInput:
+                id:a_team
+                multiline:False
+            Button:
+                text:'Clean sheet probabilities'
+                on_release:
+                    root.cspred()
+            Button:
+                text:'Go Back'
+                on_release:
+                    app.root.current = 'main'
+                    root.manager.transition.direction = 'right'
+<popup_3_1>
+    ScrollView:
+        pos_hint: {'center_x': 0.25, 'center_y': 0.3}
+        Label:
+            size_hint_y: None
+            markup:True
+            text_size: (self.width / 4, None)
+            id: hname
+            height: self.texture_size[1]
+    ScrollView:
+        pos_hint: {'center_x': 0.5, 'center_y': 0.3}
+        Label:
+            size_hint_y: None
+            markup:True
+            text_size: (self.width / 4, None)
+            id: hgoals
+            height: self.texture_size[1]
+    ScrollView:
+        pos_hint: {'center_x': 0.7, 'center_y': 0.3}
+        Label:
+            size_hint_y: None
+            markup:True
+            text_size: (self.width / 4, None)
+            id: agoals
+            height: self.texture_size[1]
+    ScrollView:
+        pos_hint: {'center_x': 0.9, 'center_y': 0.3}
+        Label:
+            size_hint_y: None
+            markup:True
+            text_size: (self.width / 4, None)
+            id: aname
+            height: self.texture_size[1]
+<popup_3_2>
+    ScrollView:
+        pos_hint: {'center_x': 0.2, 'center_y': 0.3}
+        Label:
+            size_hint_y: None
+            markup:True
+            text_size: (self.width / 4, None)
+            id: hname
+            height: self.texture_size[1]
+    ScrollView:
+        pos_hint: {'center_x': 0.4, 'center_y': 0.3}
+        Label:
+            size_hint_y: None
+            markup:True
+            text_size: (self.width / 4, None)
+            id: hpct
+            height: self.texture_size[1]
+    ScrollView:
+        pos_hint: {'center_x': 0.7, 'center_y': 0.3}
+        Label:
+            size_hint_y: None
+            markup:True
+            text_size: (self.width / 4, None)
+            id: apct
+            height: self.texture_size[1]
+    ScrollView:
+        pos_hint: {'center_x': 0.9, 'center_y': 0.3}
+        Label:
+            size_hint_y: None
+            markup:True
+            text_size: (self.width / 4, None)
+            id: aname
+            height: self.texture_size[1]
+<PredictRound>
+    name: 'predictround'
+    gw:gw
+    GridLayout:
+        cols:2
+        GridLayout:
+            cols:1
+            Label:
+                text:'For which gameweek?'
+            Button:
+                text:'Predict Scores'
+                on_release:
+                    root.scorepred()
+            Label:
+                text:''
+        GridLayout:
+            cols:1
+            TextInput:
+                id:gw
+                multiline:False
+            Button:
+                text:'Clean sheet probabilities'
+                on_release:
+                    root.cspred()
+            Button:
+                text:'Go Back'
+                on_release:
+                    app.root.current = 'main'
+                    root.manager.transition.direction = 'right'
+<popup_4_1>
+    ScrollView:
+        pos_hint: {'center_x': 0.2, 'center_y': 0.3}
+        Label:
+            size_hint_y: None
+            markup:True
+            text_size: (self.width / 4, None)
+            id: hname
+            height: self.texture_size[1]
+    ScrollView:
+        pos_hint: {'center_x': 0.4, 'center_y': 0.3}
+        Label:
+            size_hint_y: None
+            markup:True
+            text_size: (self.width / 4, None)
+            id: hgoals
+            height: self.texture_size[1]
+    ScrollView:
+        pos_hint: {'center_x': 0.7, 'center_y': 0.3}
+        Label:
+            size_hint_y: None
+            markup:True
+            text_size: (self.width / 4, None)
+            id: agoals
+            height: self.texture_size[1]
+    ScrollView:
+        pos_hint: {'center_x': 0.9, 'center_y': 0.3}
+        Label:
+            size_hint_y: None
+            markup:True
+            text_size: (self.width / 4, None)
+            id: aname
+            height: self.texture_size[1]
+<popup_4_2>
+    ScrollView:
+        pos_hint: {'center_x': 0.2, 'center_y': 0.3}
+        Label:
+            size_hint_y: None
+            markup:True
+            text_size: (self.width / 4, None)
+            id: hname
+            height: self.texture_size[1]
+    ScrollView:
+        pos_hint: {'center_x': 0.4, 'center_y': 0.3}
+        Label:
+            size_hint_y: None
+            markup:True
+            text_size: (self.width / 4, None)
+            id: hpct
+            height: self.texture_size[1]
+    ScrollView:
+        pos_hint: {'center_x': 0.7, 'center_y': 0.3}
+        Label:
+            size_hint_y: None
+            markup:True
+            text_size: (self.width / 4, None)
+            id: apct
+            height: self.texture_size[1]
+    ScrollView:
+        pos_hint: {'center_x': 0.9, 'center_y': 0.3}
+        Label:
+            size_hint_y: None
+            markup:True
+            text_size: (self.width / 4, None)
+            id: aname
+            height: self.texture_size[1]
+<PredictTopPoints>
+    name: 'predicttoppoints'
+    specific_team:specific_team
+    GridLayout:
+        cols:2
+        GridLayout:
+            cols:1
+            Label:
+                text: 'Restrict search to\nspecific a team\n(optional)'
+            Button:
+                text:'Predict this\nGameweek'
+                on_release:
+                    root.runpred_this()
+            Label:
+                text: ''
+        GridLayout:
+            cols:1
+            TextInput:
+                id:specific_team
+                multiline:False
+            Button:
+                text:'Predict next\nGameweek'
+                on_release:
+                    root.runpred_next()
+            Button:
+                text: 'Go Back'
+                on_release:
+                    app.root.current = 'main'
+                    root.manager.transition.direction = 'right'
+<popup_5>
+    ScrollView:
+        pos_hint: {'center_x': 0.4, 'center_y': 0.5}
+        Label:
+            size_hint_y: None
+            markup:True
+            text_size: (4 * self.width / 5, None)
+            id: names
+            height: self.texture_size[1]
+    ScrollView:
+        pos_hint: {'center_x': 0.9, 'center_y': 0.5}
+        Label:
+            size_hint_y: None
+            markup:True
+            text_size: (self.width / 5, None)
+            id: xP
+            height: self.texture_size[1]
+
+<ViewPastResults>
+    name: 'viewpastresults'
+    tname:tname
+    GridLayout:
+        cols:2
+        GridLayout:
+            cols:1
+            Label:
+                text:'Team name'
+            Button:
+                text:'Home'
+                on_release:
+                    root.resultsH()
+            Button:
+                text:'Overall'
+                on_release:
+                    root.resultsO()
+        GridLayout:
+            cols:1
+            TextInput:
+                id:tname
+                multiline:False
+            Button:
+                text:'Away'
+                on_release:
+                    root.resultsA()
+            Button:
+                text: 'Go Back'
+                on_release:
+                    app.root.current = 'main'
+                    root.manager.transition.direction = 'right'
+<popup_6_I>
+    ScrollView:
+        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+        Label:
+            size_hint_y: None
+            markup:True
+            text_size: (self.width / 3, None)
+            id: results
+            height: self.texture_size[1]
+    ScrollView:
+        pos_hint: {'center_x': 0.1, 'center_y': -0.3}
+        Label:
+            size_hint_y: None
+            text_size: (self.width / 9, None)
+            id: table1
+            height: self.texture_size[1]
+    ScrollView:
+        pos_hint: {'center_x': 0.2, 'center_y': -0.3}
+        Label:
+            size_hint_y: None
+            text_size: (self.width / 9, None)
+            id: table2
+            height: self.texture_size[1]
+    ScrollView:
+        pos_hint: {'center_x': 0.3, 'center_y': -0.3}
+        Label:
+            size_hint_y: None
+            text_size: (self.width / 9, None)
+            id: table3
+            height: self.texture_size[1]
+    ScrollView:
+        pos_hint: {'center_x': 0.4, 'center_y': -0.3}
+        Label:
+            size_hint_y: None
+            text_size: (self.width / 9, None)
+            id: table4
+            height: self.texture_size[1]
+    ScrollView:
+        pos_hint: {'center_x': 0.5, 'center_y': -0.3}
+        Label:
+            size_hint_y: None
+            text_size: (self.width / 9, None)
+            id: table5
+            height: self.texture_size[1]
+    ScrollView:
+        pos_hint: {'center_x': 0.6, 'center_y': -0.3}
+        Label:
+            size_hint_y: None
+            text_size: (self.width / 9, None)
+            id: table6
+            height: self.texture_size[1]
+    ScrollView:
+        pos_hint: {'center_x': 0.7, 'center_y': -0.3}
+        Label:
+            size_hint_y: None
+            text_size: (self.width / 9, None)
+            id: table7
+            height: self.texture_size[1]
+    ScrollView:
+        pos_hint: {'center_x': 0.8, 'center_y': -0.3}
+        Label:
+            size_hint_y: None
+            text_size: (self.width / 9, None)
+            id: table8
+            height: self.texture_size[1]
+<popup_6_O>
+    ScrollView:
+        pos_hint: {'center_x': 0.3, 'center_y': 0.6}
+        Label:
+            markup:True
+            text_size: (self.width / 3, 4 * self.height / 5)
+            id: hresults
+            height: self.texture_size[1]
+    ScrollView:
+        pos_hint: {'center_x': 0.7, 'center_y': 0.6}
+        Label:
+            markup:True
+            text_size: (self.width / 3, 4 * self.height / 5)
+            id: aresults
+            height: self.texture_size[1]
+    ScrollView:
+        pos_hint: {'center_x': 0.09, 'center_y': -0.3}
+        Label:
+            size_hint_y: None
+            text_size: (self.width / 6, None)
+            id: table0
+            height: self.texture_size[1]
+    ScrollView:
+        pos_hint: {'center_x': 0.25, 'center_y': -0.3}
+        Label:
+            size_hint_y: None
+            text_size: (self.width / 10, None)
+            id: table1
+            height: self.texture_size[1]
+    ScrollView:
+        pos_hint: {'center_x': 0.35, 'center_y': -0.3}
+        Label:
+            size_hint_y: None
+            text_size: (self.width / 10, None)
+            id: table2
+            height: self.texture_size[1]
+    ScrollView:
+        pos_hint: {'center_x': 0.45, 'center_y': -0.3}
+        Label:
+            size_hint_y: None
+            text_size: (self.width / 10, None)
+            id: table3
+            height: self.texture_size[1]
+    ScrollView:
+        pos_hint: {'center_x': 0.55, 'center_y': -0.3}
+        Label:
+            size_hint_y: None
+            text_size: (self.width / 10, None)
+            id: table4
+            height: self.texture_size[1]
+    ScrollView:
+        pos_hint: {'center_x': 0.65, 'center_y': -0.3}
+        Label:
+            size_hint_y: None
+            text_size: (self.width / 10, None)
+            id: table5
+            height: self.texture_size[1]
+    ScrollView:
+        pos_hint: {'center_x': 0.75, 'center_y': -0.3}
+        Label:
+            size_hint_y: None
+            text_size: (self.width / 10, None)
+            id: table6
+            height: self.texture_size[1]
+    ScrollView:
+        pos_hint: {'center_x': 0.85, 'center_y': -0.3}
+        Label:
+            size_hint_y: None
+            text_size: (self.width / 10, None)
+            id: table7
+            height: self.texture_size[1]
+    ScrollView:
+        pos_hint: {'center_x': 0.95, 'center_y': -0.3}
+        Label:
+            size_hint_y: None
+            text_size: (self.width / 10, None)
+            id: table8
+            height: self.texture_size[1]
+<ViewTables>
+    name: 'viewtables'
+    GridLayout:
+        cols:2
+        GridLayout:
+            cols:1
+            Button:
+                text:'Home'
+                on_release:
+                    root.tablesH()
+            Button:
+                text:'Overall'
+                on_release:
+                    root.tablesO()
+        GridLayout:
+            cols:1
+            Button:
+                text:'Away'
+                on_release:
+                    root.tablesA()
+            Button:
+                text: 'Go Back'
+                on_release:
+                    app.root.current = 'main'
+                    root.manager.transition.direction = 'right'
+<popup_7>
+    ScrollView:
+        pos_hint: {'center_x': 0.1, 'center_y': 0.5}
+        Label:
+            size_hint_y: None
+            text_size: (self.width / 5, None)
+            id: col0
+            height: self.texture_size[1]
+    ScrollView:
+        pos_hint: {'center_x': 0.25, 'center_y': 0.5}
+        Label:
+            size_hint_y: None
+            markup:True
+            text_size: (self.width / 10, None)
+            id: col1
+            height: self.texture_size[1]
+    ScrollView:
+        pos_hint: {'center_x': 0.35, 'center_y': 0.5}
+        Label:
+            size_hint_y: None
+            markup:True
+            text_size: (self.width / 10, None)
+            id: col2
+            height: self.texture_size[1]
+    ScrollView:
+        pos_hint: {'center_x': 0.45, 'center_y': 0.5}
+        Label:
+            size_hint_y: None
+            markup:True
+            text_size: (self.width / 10, None)
+            id: col3
+            height: self.texture_size[1]
+    ScrollView:
+        pos_hint: {'center_x': 0.55, 'center_y': 0.5}
+        Label:
+            size_hint_y: None
+            markup:True
+            text_size: (self.width / 10, None)
+            id: col4
+            height: self.texture_size[1]
+    ScrollView:
+        pos_hint: {'center_x': 0.65, 'center_y': 0.5}
+        Label:
+            size_hint_y: None
+            markup:True
+            text_size: (self.width / 10, None)
+            id: col5
+            height: self.texture_size[1]
+    ScrollView:
+        pos_hint: {'center_x': 0.75, 'center_y': 0.5}
+        Label:
+            size_hint_y: None
+            markup:True
+            text_size: (self.width / 10, None)
+            id: col6
+            height: self.texture_size[1]
+    ScrollView:
+        pos_hint: {'center_x': 0.85, 'center_y': 0.5}
+        Label:
+            size_hint_y: None
+            markup:True
+            text_size: (self.width / 10, None)
+            id: col7
+            height: self.texture_size[1]
+    ScrollView:
+        pos_hint: {'center_x': 0.95, 'center_y': 0.5}
+        Label:
+            size_hint_y: None
+            markup:True
+            text_size: (self.width / 10, None)
+            id: col8
+            height: self.texture_size[1]
+
+<FPLPlan>
+    name: 'fplplan'
+    gmwk:gmwk
+    plin:plin
+    plout:plout
+    GridLayout:
+        rows:2
+        FloatLayout:
+            ScrollView:
+                pos_hint: {'center_x':0.15, 'center_y': 0.5}
+                Label:
+                    id:gw
+                    text_size: (self.width / 5, None)
+                    markup:True
+            ScrollView:
+                pos_hint: {'center_x':0.425, 'center_y': 0.5}
+                Label:
+                    id:tin
+                    text_size: (7 * self.width / 20, None)
+                    markup:True
+            ScrollView:
+                pos_hint: {'center_x':0.775, 'center_y':0.5}
+                Label:
+                    id:tout
+                    text_size: (7 * self.width / 20, None)
+                    markup:True
+        GridLayout:
+            cols:2
+            GridLayout:
+                cols:1
+                Button:
+                    text:'Add Transfer'
+                    on_release:
+                        root.addTransfer()
+                Button:
+                    text:'Remove Transfer'
+                    on_release:
+                        root.removeTransfer()
+                Button:
+                    text:'Delete Gameweek'
+                    on_release:
+                        root.deleteGW()
+            GridLayout:
+                rows:2
+                GridLayout:
+                    cols:2
+                    GridLayout:
+                        cols:1
+                        Label:
+                            text:'Gameweek'
+                        Label:
+                            text:'Player in'
+                        Label:
+                            text:'Player out'
+                    GridLayout:
+                        cols:1
+                        TextInput:
+                            id:gmwk
+                            multiline:False
+                        TextInput:
+                            id:plin
+                            multiline:False
+                        TextInput:
+                            id:plout
+                            multiline:False
+                Button:
+                    text:'Go Back'
+                    on_release:
+                        app.root.current = 'main'
+                        root.manager.transition.direction = 'right'
+
+<FPLTeam>
+    name: 'fplteam'
+    pos_var:pos_var
+    teams_var:teams_var
+    nums_var:nums_var
+    gw:gw
+    plout:plout
+    plinN:plinN
+    plinT:plinT
+    gw_start:gw_start
+    gw_end:gw_end
+    GridLayout:
+        rows:2
+        FloatLayout:
+            Label:
+                font_size:40
+                pos_hint: {'center_x': 0.5, 'center_y': 0.9}
+                id:currentgw
+                size_hint: (0.1, 0.1)
+            ScrollView:
+                pos_hint:{'center_x': 0.15, 'center_y': 0.4}
+                Label:
+                    font_size:32
+                    id:col1
+                    markup: True
+                    text_size: (self.width / 5, 4 * self.height / 5)
+            ScrollView:
+                pos_hint:{'center_x': 0.35, 'center_y': 0.4}
+                Label:
+                    font_size:32
+                    id:col2
+                    markup: True
+                    text_size: (self.width / 5, 4 * self.height / 5)
+            ScrollView:
+                pos_hint:{'center_x': 0.55, 'center_y': 0.4}
+                Label:
+                    font_size:32
+                    id:col3
+                    markup: True
+                    text_size: (self.width / 5, 4 * self.height / 5)
+            ScrollView:
+                pos_hint:{'center_x': 0.75, 'center_y': 0.4}
+                Label:
+                    font_size:32
+                    id:col4
+                    markup: True
+                    text_size: (self.width / 5, 4 * self.height / 5)
+            ScrollView:
+                pos_hint:{'center_x': 0.95, 'center_y': 0.4}
+                Label:
+                    font_size:32
+                    id:col5
+                    markup: True
+                    text_size: (self.width / 5, 4 * self.height / 5)
+            Button:
+                pos_hint: {'center_x': 0.9, 'center_y': 0.9}
+                font_size:35
+                text:'Help'
+                size_hint: (0.1, 0.1)
+                on_release:
+                    root.helpbutton()
+        GridLayout:
+            cols:2
+            GridLayout:
+                cols:1
+                GridLayout:
+                    cols:2
+                    Label:
+                        font_size:35
+                        text:'Position'
+                    TextInput:
+                        id:pos_var
+                        multiline:False
+                    Label:
+                        font_size:35
+                        text:'Start gameweek'
+                    TextInput:
+                        id:gw_start
+                        multiline:False
+                GridLayout:
+                    cols:2
+                    Label:
+                        font_size:35
+                        text:'End gameweek'
+                    TextInput:
+                        id:gw_end
+                        multiline:False
+                    Label:
+                        font_size:35
+                        text:'Teams'
+                    TextInput:
+                        id:teams_var
+                        multiline:False
+                GridLayout:
+                    cols:2
+                    Label:
+                        font_size:35
+                        text:'No. to rotate\nNo. of Fodder\n(e.g: 3,1)'
+                    TextInput:
+                        id:nums_var
+                        multiline:False
+                Button:
+                    font_size:35
+                    text:'View best replacements'
+                    on_release:
+                        root.alternates()
+            GridLayout:
+                cols:1
+                GridLayout:
+                    rows:2
+                    GridLayout:
+                        cols:2
+                        Label:
+                            font_size:35
+                            text:'Gameweek:'
+                        TextInput:
+                            id: gw
+                            multiline:False
+                    Button:
+                        font_size:35
+                        text:'Update Team'
+                        on_release:
+                            root.updateteam()
+                GridLayout:
+                    rows:2
+                    GridLayout:
+                        cols:2
+                        Label:
+                            font_size:35
+                            text:'Player out'
+                        TextInput:
+                            id:plout
+                            multiline:False
+                    GridLayout:
+                        cols:2
+                        Label:
+                            font_size:35
+                            text:'Player in name'
+                        TextInput:
+                            id:plinN
+                            multiline:False
+                GridLayout:
+                    rows:2
+                    GridLayout:
+                        cols:2
+                        Label:
+                            font_size:35
+                            text:'Player in team'
+                        TextInput:
+                            id:plinT
+                            multiline:False
+                    Button:
+                        font_size:35
+                        text:'Make Transfer'
+                        on_release:
+                            root.maketransfer()
+                Button:
+                    font_size:40
+                    text: 'Go Back'
+                    on_release:
+                        app.root.current = 'main'
+                        root.manager.transition.direction = 'right'
+<popup_9>
+    ScrollView:
+        pos_hint:{'center_x': 0.1, 'center_y': 0.5}
+        Label:
+            size_hint_y: None
+            id:col1
+            markup: True
+            text_size: (self.width / 6, None)
+            height: self.texture_size[1]
+    ScrollView:
+        pos_hint:{'center_x': 0.267, 'center_y': 0.5}
+        Label:
+            size_hint_y: None
+            id:col2
+            markup: True
+            text_size: (self.width / 6, None)
+            height: self.texture_size[1]
+    ScrollView:
+        pos_hint:{'center_x': 0.433, 'center_y': 0.5}
+        Label:
+            size_hint_y: None
+            id:col3
+            markup: True
+            text_size: (self.width / 6, None)
+            height: self.texture_size[1]
+    ScrollView:
+        pos_hint:{'center_x': 0.6, 'center_y': 0.5}
+        Label:
+            size_hint_y: None
+            id:col4
+            markup: True
+            text_size: (self.width / 6, None)
+            height: self.texture_size[1]
+    ScrollView:
+        pos_hint:{'center_x': 0.767, 'center_y': 0.5}
+        Label:
+            size_hint_y: None
+            id:col5
+            markup: True
+            text_size: (self.width / 6, None)
+            height: self.texture_size[1]
+    ScrollView:
+        pos_hint:{'center_x': 0.933, 'center_y': 0.5}
+        Label:
+            size_hint_y: None
+            id:col6
+            markup: True
+            text_size: (self.width / 6, None)
+            height: self.texture_size[1]
+<popup_9_help>
+    ScrollView:
+        pos_hint: {'center_x':0.5, 'center_y':0.5}
+        Label:
+            size_hint_y:None
+            markup: True
+            text_size: (self.width, None)
+            height: self.texture_size[1]
+            text:'Here you can view the fixtures your players will have for future gameweeks. This will help you plan when and which transfers you should make.\n\nTo make a change to your current team, use the [color=#00FF00]\'Make Transfer\'[color=#FFFFFF] button. Ensure the [color=#0000FF]\'Player in team\'[color=#FFFFFF] is a valid team abbreviation with no spaces, and ensure that the [color=#0000FF]\'Player out\'[color=#FFFFFF] has a name that matches one from your current team (case-sensitive). \n\nTo see which teams you should be bringing in to your team to rotate well with what you currently have, use the [color=#00FF00]\'View best replacements\'[color=#FFFFFF] Button.\nFirst type in the position you are interested in changing (G / D / M / A).\nType the gameweek range that you will be looking to keep these players for (longer ranges give more meaningful results).\nType the teams from which you currently own players in this position that you wish to keep. Separate the teams with a comma and no spaces.\nFinally, in the [color=#0000FF]\'No to rotate, No of Fodder\'[color=#FFFFFF] box, type in two numbers separated by a comma. [color=#0000FF]\'No to rotate\'[color=#FFFFFF] is the number of players in this position that you will be looking to rotate / use per game (usually 3/4 for defenders and mids for example). [color=#0000FF]\'No of Fodder\'[color=#FFFFFF] is the number of players in this position that you currently own, or plan to own that will never play (e.g. 4m or 4.5m players). Then press the button.\n\n[color=#808080]You can edit the teams that these replacements are selected from in the settings menu. Enter any teams from which you would consider buying players in each position from. E.g. one wouldn\'t want to put MCI in the defender selection due to lack of regular games for most of MCI\'s defenders. Restricting the search to fewer teams results in faster run time.[color=#FFFFFF]'
+<Settings1>
+    name: 'settings1'
+    setting1:setting1
+    setting2:setting2
+    setting3:setting3
+    GridLayout:
+        rows:5
+        GridLayout:
+            cols:2
+            Label:
+                text: 'Form Sensitivity for xPoints'
+            TextInput:
+                id:setting1
+                text: root.setting_1
+                multiline:False
+        GridLayout:
+            cols:2
+            Label:
+                text: 'Edit nailed starting XI players'
+            TextInput:
+                id:setting2
+                text: root.setting_2
+                multiline:False
+        GridLayout:
+            cols:2
+            Label:
+                text: 'Edit bench fodder players'
+            TextInput:
+                id:setting3
+                text: root.setting_3
+                multiline:False
+        Button:
+            text: 'Edit teams with usable players'
+            on_release:
+                app.root.current = 'usableplayers'
+                root.manager.transition.direction = 'left'
+        GridLayout:
+            cols:2
+            Button:
+                markup:True
+                text: '[color=#00FF00]Update[/color]'
+                on_release:
+                    root.update_settings()
+            Button:
+                text: 'Go Back'
+                on_release:
+                    app.root.current = 'main'
+                    root.manager.transition.direction = 'right'
+    Button:
+        pos_hint:{'center_x':0.93, 'center_y': 0.95}
+        size_hint:(0.1, 0.06)
+        text:'Help'
+        on_release:
+            root.helpbutton()
+<settings_help>
+    ScrollView:
+        pos_hint: {'center_x':0.5, 'center_y':0.5}
+        Label:
+            size_hint_y:None
+            markup: True
+            text_size: (self.width, None)
+            height: self.texture_size[1]
+            text:'[color=#00FF00]\'Form sensitivity for xPoints\'[color=#FFFFFF]: Number of recent games considered when calculating player form. The default value is [color=#8080FF]5[color=#FFFFFF], but a lower value will give points predictions which are more sensitive to recent form.\n\n[color=#00FF00]\'Nailed starting players\'[color=#FFFFFF]: Players in your team (from the [color=#8080FF]\'FPL Team\'[color=#FFFFFF] menu) who you would start regardless of the difficulty of their upcoming fixtures. Premium players and players that perform against all sorts of opponents should go here. (case-sensitive)\n\n[color=#00FF00]\'Bench Fodder\'[color=#FFFFFF] players: Players in your team (from the [color=#8080FF]\'FPL Team\'[color=#FFFFFF] menu) that you would bench regardless of the difficulty of their upcoming fixtures. Players that don\'t play or are injured / suspended should go here. (case-sensitive)\n\n[color=#00FF00]\'Teams with usable players\'[color=#FFFFFF]: Which teams have a player in each position that you would consider a viable choice for your FPL team? Click here to select or deselect viable choices for when you run the Alternative player finder in the FPL_Team menu.'
+<main_menu_help>
+    ScrollView:
+        pos_hint: {'center_x':0.5, 'center_y':0.6}
+        size_hint: (1, 0.8)
+        Label:
+            size_hint_y: None
+            markup: True
+            text_size: (self.width, None)
+            height: self.texture_size[1]
+            text:'[color=#0000FF]Each menu choice explained:[color=#FFFFFF]\n\n[color=#00FF00]View Fixture Difficulties[color=#FFFFFF]: Can be used to see which teams have an \'easy\' run of fixtures for any given range of gameweeks, or to see what fixtures any specific team has. Can also view Fixture Difficulty Rating (FDR) for each team, home and away. These values are different to the official FPL website, and are more sensitive to form.\n\n[color=#00FF00]Update Files[color=#FFFFFF]: Update scores to adjust FDR of teams who have played since last update. Update goalscorers then allows you to view the top 25 goalscorers and assisters in the league.\n\n[color=#00FF00]Predict Fixture[color=#FFFFFF]: Can be used to give the expected goals or the clean sheet probability of each team in any given fixture.\n\n[color=#00FF00]Predict Round of Fixtures[color=#FFFFFF]: Given any gameweek number, this gives expected goals predictions of the fixtures in this gameweek. It can also give clean sheet probabilities for those fixtures.\n\n[color=#00FF00]Predict Top Scorers[color=#FFFFFF]: For either this current, or for next gameweek, this gives each player\'s expected points sorted from highest to lowest. You have the option to restrict the search to a specific team.\n\n[color=#00FF00]View Past Results[color=#FFFFFF]: Can view the results of each team separated by home and away games for the season.\n\n[color=#00FF00]View Tables[color=#FFFFFF]: Can view the overall / home / away premier league table.\n\n[color=#00FF00]FPL_Plan[color=#FFFFFF]: A tool that can be used to plan transfers in advance, based on when fixtures become nice for different teams. \n\n[color=#00FF00]FPL_Team[color=#FFFFFF]: A useful tool to see how your personal FPL team will look for upcoming gameweeks. You can see what fixtures each player will have, and a recommended lineup is suggested based on the strength of opponents. You can also see which teams you should buy players from in certain positions to rotate best to avoid using players who have tough fixtures.\n\n[color=#00FF00]Settings[color=#FFFFFF]: Change personal preferences.\n\n'
+    Button:
+        pos_hint:{'center_x':0.5, 'center_y':0.1}
+        size_hint:(0.5, 0.1)
+        text: 'Set / Reset Team'
+        on_release:
+            app.root.current = 'teamset'
+<error_popup>
+    Label:
+        text:'[color=#FF0000]Something went wrong.\nPlease try again[color=#FFFFFF]'
+        markup:True
+        pos_hint:{'center_x':0.5, 'center_y':0.5}
+<Set_Team>
+    name:'teamset'
+    pn1:playername1
+    tn1:teamname1
+    ps1:pos1
+    pn2:playername2
+    tn2:teamname2
+    ps2:pos2
+    pn3:playername3
+    tn3:teamname3
+    ps3:pos3
+    pn4:playername4
+    tn4:teamname4
+    ps4:pos4
+    pn5:playername5
+    tn5:teamname5
+    ps5:pos5
+    pn6:playername6
+    tn6:teamname6
+    ps6:pos6
+    pn7:playername7
+    tn7:teamname7
+    ps7:pos7
+    pn8:playername8
+    tn8:teamname8
+    ps8:pos8
+    pn9:playername9
+    tn9:teamname9
+    ps9:pos9
+    pn10:playername10
+    tn10:teamname10
+    ps10:pos10
+    pn11:playername11
+    tn11:teamname11
+    ps11:pos11
+    pn12:playername12
+    tn12:teamname12
+    ps12:pos12
+    pn13:playername13
+    tn13:teamname13
+    ps13:pos13
+    pn14:playername14
+    tn14:teamname14
+    ps14:pos14
+    pn15:playername15
+    tn15:teamname15
+    ps15:pos15
+    GridLayout:
+        rows:17
+        GridLayout:
+            cols:3
+            Label:
+                text:'Player Name'
+            Label:
+                text:'Team Abbreviation'
+            Label:
+                text:'Position'
+        GridLayout:
+            cols:3
+            TextInput:
+                multiline:False
+                id:playername1
+            TextInput:
+                multiline:False
+                id:teamname1
+            TextInput:
+                multiline:False
+                id:pos1
+                text:'G'
+        GridLayout:
+            cols:3
+            TextInput:
+                multiline:False
+                id:playername2
+            TextInput:
+                multiline:False
+                id:teamname2
+            TextInput:
+                multiline:False
+                id:pos2
+                text:'G'
+        GridLayout:
+            cols:3
+            TextInput:
+                multiline:False
+                id:playername3
+            TextInput:
+                multiline:False
+                id:teamname3
+            TextInput:
+                multiline:False
+                id:pos3
+                text:'D'
+        GridLayout:
+            cols:3
+            TextInput:
+                multiline:False
+                id:playername4
+            TextInput:
+                multiline:False
+                id:teamname4
+            TextInput:
+                multiline:False
+                id:pos4
+                text:'D'
+        GridLayout:
+            cols:3
+            TextInput:
+                multiline:False
+                id:playername5
+            TextInput:
+                multiline:False
+                id:teamname5
+            TextInput:
+                multiline:False
+                id:pos5
+                text:'D'
+        GridLayout:
+            cols:3
+            TextInput:
+                multiline:False
+                id:playername6
+            TextInput:
+                multiline:False
+                id:teamname6
+            TextInput:
+                multiline:False
+                id:pos6
+                text:'D'
+        GridLayout:
+            cols:3
+            TextInput:
+                multiline:False
+                id:playername7
+            TextInput:
+                multiline:False
+                id:teamname7
+            TextInput:
+                multiline:False
+                id:pos7
+                text:'D'
+        GridLayout:
+            cols:3
+            TextInput:
+                multiline:False
+                id:playername8
+            TextInput:
+                multiline:False
+                id:teamname8
+            TextInput:
+                multiline:False
+                id:pos8
+                text:'M'
+        GridLayout:
+            cols:3
+            TextInput:
+                multiline:False
+                id:playername9
+            TextInput:
+                multiline:False
+                id:teamname9
+            TextInput:
+                multiline:False
+                id:pos9
+                text:'M'
+        GridLayout:
+            cols:3
+            TextInput:
+                multiline:False
+                id:playername10
+            TextInput:
+                multiline:False
+                id:teamname10
+            TextInput:
+                multiline:False
+                id:pos10
+                text:'M'
+        GridLayout:
+            cols:3
+            TextInput:
+                multiline:False
+                id:playername11
+            TextInput:
+                multiline:False
+                id:teamname11
+            TextInput:
+                multiline:False
+                id:pos11
+                text:'M'
+        GridLayout:
+            cols:3
+            TextInput:
+                multiline:False
+                id:playername12
+            TextInput:
+                multiline:False
+                id:teamname12
+            TextInput:
+                multiline:False
+                id:pos12
+                text:'M'
+        GridLayout:
+            cols:3
+            TextInput:
+                multiline:False
+                id:playername13
+            TextInput:
+                multiline:False
+                id:teamname13
+            TextInput:
+                multiline:False
+                id:pos13
+                text:'A'
+        GridLayout:
+            cols:3
+            TextInput:
+                multiline:False
+                id:playername14
+            TextInput:
+                multiline:False
+                id:teamname14
+            TextInput:
+                multiline:False
+                id:pos14
+                text:'A'
+        GridLayout:
+            cols:3
+            TextInput:
+                multiline:False
+                id:playername15
+            TextInput:
+                multiline:False
+                id:teamname15
+            TextInput:
+                multiline:False
+                id:pos15
+                text:'A'
+        GridLayout:
+            cols:1
+            Button:
+                text:'Submit'
+                on_release:
+                    app.root.current = 'main'
+                    root.write_team()
+
+<UsablePlayers>:
+    name: 'usableplayers'
+    GridLayout:
+        cols:6
+        GridLayout:
+            rows:21
+            Label:
+                text: ''
+            Label:
+                text: 'ARS'
+            Label:
+                text: 'AVL'
+            Label:
+                text: 'BHA'
+            Label:
+                text: 'BOU'
+            Label:
+                text: 'BUR'
+            Label:
+                text: 'CHE'
+            Label:
+                text: 'CRY'
+            Label:
+                text: 'EVE'
+            Label:
+                text: 'LEI'
+            Label:
+                text: 'LIV'
+            Label:
+                text: 'MCI'
+            Label:
+                text: 'MUN'
+            Label:
+                text: 'NEW'
+            Label:
+                text: 'NOR'
+            Label:
+                text: 'SHU'
+            Label:
+                text: 'SOU'
+            Label:
+                text: 'TOT'
+            Label:
+                text: 'WAT'
+            Label:
+                text: 'WHU'
+            Label:
+                text: 'WOL'
+        GridLayout:
+            rows:21
+            Label:
+                text:'GK'
+            CheckBox:
+                id: arsg
+                active: root.ARSG
+            CheckBox:
+                id: avlg
+                active: root.AVLG
+            CheckBox:
+                id: bhag
+                active: root.BHAG
+            CheckBox:
+                id: boug
+                active: root.BOUG
+            CheckBox:
+                id: burg
+                active: root.BURG
+            CheckBox:
+                id: cheg
+                active: root.CHEG
+            CheckBox:
+                id: cryg
+                active: root.CRYG
+            CheckBox:
+                id: eveg
+                active: root.EVEG
+            CheckBox:
+                id: leig
+                active: root.LEIG
+            CheckBox:
+                id: livg
+                active: root.LIVG
+            CheckBox:
+                id: mcig
+                active: root.MCIG
+            CheckBox:
+                id: mung
+                active: root.MUNG
+            CheckBox:
+                id: newg
+                active: root.NEWG
+            CheckBox:
+                id: norg
+                active: root.NORG
+            CheckBox:
+                id: shug
+                active: root.SHUG
+            CheckBox:
+                id: soug
+                active: root.SOUG
+            CheckBox:
+                id: totg
+                active: root.TOTG
+            CheckBox:
+                id: watg
+                active: root.WATG
+            CheckBox:
+                id: whug
+                active: root.WHUG
+            CheckBox:
+                id: wolg
+                active: root.WOLG
+        GridLayout:
+            rows:21
+            Label:
+                text:'DEF'
+            CheckBox:
+                id: arsd
+                active: root.ARSD
+            CheckBox:
+                id: avld
+                active: root.AVLD
+            CheckBox:
+                id: bhad
+                active: root.BHAD
+            CheckBox:
+                id: boud
+                active: root.BOUD
+            CheckBox:
+                id: burd
+                active: root.BURD
+            CheckBox:
+                id: ched
+                active: root.CHED
+            CheckBox:
+                id: cryd
+                active: root.CRYD
+            CheckBox:
+                id: eved
+                active: root.EVED
+            CheckBox:
+                id: leid
+                active: root.LEID
+            CheckBox:
+                id: livd
+                active: root.LIVD
+            CheckBox:
+                id: mcid
+                active: root.MCID
+            CheckBox:
+                id: mund
+                active: root.MUND
+            CheckBox:
+                id: newd
+                active: root.NEWD
+            CheckBox:
+                id: nord
+                active: root.NORD
+            CheckBox:
+                id: shud
+                active: root.SHUD
+            CheckBox:
+                id: soud
+                active: root.SOUD
+            CheckBox:
+                id: totd
+                active: root.TOTD
+            CheckBox:
+                id: watd
+                active: root.WATD
+            CheckBox:
+                id: whud
+                active: root.WHUD
+            CheckBox:
+                id: wold
+                active: root.WOLD
+        GridLayout:
+            rows:21
+            Label:
+                text:'MID'
+            CheckBox:
+                id: arsm
+                active: root.ARSM
+            CheckBox:
+                id: avlm
+                active: root.AVLM
+            CheckBox:
+                id: bham
+                active: root.BHAM
+            CheckBox:
+                id: boum
+                active: root.BOUM
+            CheckBox:
+                id: burm
+                active: root.BURM
+            CheckBox:
+                id: chem
+                active: root.CHEM
+            CheckBox:
+                id: crym
+                active: root.CRYM
+            CheckBox:
+                id: evem
+                active: root.EVEM
+            CheckBox:
+                id: leim
+                active: root.LEIM
+            CheckBox:
+                id: livm
+                active: root.LIVM
+            CheckBox:
+                id: mcim
+                active: root.MCIM
+            CheckBox:
+                id: munm
+                active: root.MUNM
+            CheckBox:
+                id: newm
+                active: root.NEWM
+            CheckBox:
+                id: norm
+                active: root.NORM
+            CheckBox:
+                id: shum
+                active: root.SHUM
+            CheckBox:
+                id: soum
+                active: root.SOUM
+            CheckBox:
+                id: totm
+                active: root.TOTM
+            CheckBox:
+                id: watm
+                active: root.WATM
+            CheckBox:
+                id: whum
+                active: root.WHUM
+            CheckBox:
+                id: wolm
+                active: root.WOLM
+        GridLayout:
+            rows:21
+            Label:
+                text:'ATT'
+            CheckBox:
+                id: arsf
+                active: root.ARSF
+            CheckBox:
+                id: avlf
+                active: root.AVLF
+            CheckBox:
+                id: bhaf
+                active: root.BHAF
+            CheckBox:
+                id: bouf
+                active: root.BOUF
+            CheckBox:
+                id: burf
+                active: root.BURF
+            CheckBox:
+                id: chef
+                active: root.CHEF
+            CheckBox:
+                id: cryf
+                active: root.CRYF
+            CheckBox:
+                id: evef
+                active: root.EVEF
+            CheckBox:
+                id: leif
+                active: root.LEIF
+            CheckBox:
+                id: livf
+                active: root.LIVF
+            CheckBox:
+                id: mcif
+                active: root.MCIF
+            CheckBox:
+                id: munf
+                active: root.MUNF
+            CheckBox:
+                id: newf
+                active: root.NEWF
+            CheckBox:
+                id: norf
+                active: root.NORF
+            CheckBox:
+                id: shuf
+                active: root.SHUF
+            CheckBox:
+                id: souf
+                active: root.SOUF
+            CheckBox:
+                id: totf
+                active: root.TOTF
+            CheckBox:
+                id: watf
+                active: root.WATF
+            CheckBox:
+                id: whuf
+                active: root.WHUF
+            CheckBox:
+                id: wolf
+                active: root.WOLF
+        GridLayout:
+            rows:3
+            Button:
+                text: 'Save'
+                on_release:
+                    root.updateFile()
+            Label:
+                text:''
+            Button:
+                text:'Go Back'
+                on_release:
+                    app.root.current = 'settings1'
+                    root.manager.transition.direction = 'right'
